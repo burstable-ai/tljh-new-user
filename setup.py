@@ -1,8 +1,7 @@
 from setuptools import setup
 
 setup(
-    name="tljh-shared-directory",
-    entry_points={"tljh": ["shared-directory = tljh_shared_directory"]},
-    py_modules=["tljh_shared_directory"],
-    install_requires=['sh'],
+    name="cb_new_user",
+    entry_points={"tljh": ["new_user = cb_new_user"]},
+    py_modules=["cb_new_user"],
 )
