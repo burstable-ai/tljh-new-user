@@ -1,6 +1,5 @@
 from tljh.hooks import hookimpl
-import os
-import sys
+import os, traceback, shutil
 
 @hookimpl
 def tljh_new_user_create(username):
@@ -12,5 +11,16 @@ def tljh_new_user_create(username):
             break
     home = f"/{path}/{username}"
     os.system(f"echo NEW USER: {username} HOME: {home} >> tljh-new-user-data.log")
-    os.chdir(home)
-    os.system("touch foobaz")
+    if os.path.isdir('new_user_data'):
+        os.system(f"echo ' ' copying new_user_data >> tljh-new-user-data.log")
+        err = None
+        try:
+            shutil.copytree("new_user_data", home, dirs_exist_ok=True)
+        except:
+            f=open("tljh-new-user-data.log", 'a')
+            print (traceback.format_exc(), file=f)
+            f.close()
+            err = traceback.format_exception_only()
+    else:
+        os.system(f"echo ' ' no new_user_data directory found, nothing to copy >> tljh-new-user-data.log")
+    os.system(f"echo ' ' returns: {err} >> tljh-new-user-data.log")
