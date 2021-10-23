@@ -14,7 +14,6 @@ def tljh_new_user_create(username):
 
     if os.path.isdir('new_user_data'):
         os.system(f"echo ' ' copying new_user_data >> tljh-new-user.log")
-        err = None
         try:
             shutil.copytree("new_user_data", home, dirs_exist_ok=True)
         except:
@@ -25,13 +24,8 @@ def tljh_new_user_create(username):
         os.system(f"echo ' ' no new_user_data directory found, nothing to copy >> tljh-new-user.log")
 
     if os.path.exists('new_user_script'):
-        os.system(f"echo ' ' executing new_user_script >> tljh-new-user.log")
-        err = None
-        try:
-            os.system('./new_user_script')
-        except:
-            f=open("tljh-new-user.log", 'a')
-            print (traceback.format_exc(), file=f)
-            f.close()
+        os.system(f"echo ' ' executing new_user_script {home} >> tljh-new-user.log")
+        err = os.system(f"./new_user_script {home} >> tljh-new-user.log 2>&1")
+        os.system(f"echo ' ' script returns {err} >> tljh-new-user.log")
     else:
         os.system(f"echo ' ' no new_user_script found >> tljh-new-user.log")
