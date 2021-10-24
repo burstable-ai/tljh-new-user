@@ -1,16 +1,26 @@
-# tljh-shared-directory
+# tljh-new-user
 
-`tljh-shared-directory` is a plugin for [The Littlest JupyterHub (TLJH)](https://tljh.jupyter.org) which sets up a 'shared directory' for the Hub in `/srv/scratch`.  The `/srv/scratch` shared directory is used to 'publish' notebooks internally within the Hub.  E.g. if there are three users, then User A may develop a Notebook in their `/home/user_a` directory and when it is complete copy it to `/srv/scratch` (symlinked in every user's home) so that User B and User C can see the Notebook.  However, only User A is able to make further changes to it.
+`tljh-new-user` is a plugin for [The Littlest JupyterHub (TLJH)](https://tljh.jupyter.org) which 
+runs after a user is created. 
 
-Shared directories go hand-in-hand with Dashboarding apps like Voila or Panel.  User A copies a Notebook into the `/srv/scratch` directory, then other users can view that Notebook as a Dashboard.
+When run, the plugin copies the folder `new_user_data` (if found) 
+in the `state/` folder (typically installed at `/opt/tljh/state)`
+into the home directory of the new user. Ownership of the data in 
+the home directory is then recursively
+set to the user.
+
+Additionally, the plugin looks in `state/` for an executable file 
+called `new_user_script` and runs it if it exists. The
+script receives the username as its only argument.
 
 # Install
 
-Include `--plugin tljh-shared-directory` in your TLJH install script.  An example install with admin user `kafonek` would be:
+Include `--plugin tljh-new-user` in your TLJH install script.  An 
+example install with admin user `administrator` would be:
 
 ```
 #!/bin/bash
 curl https://raw.githubusercontent.com/jupyterhub/the-littlest-jupyterhub/master/bootstrap/bootstrap.py \
   | sudo python3 - \
-    --admin kafonek --plugin git+https://github.com/kafonek/tljh-shared-directory
+    --admin administrator --plugin tljh-new-user
 ```
