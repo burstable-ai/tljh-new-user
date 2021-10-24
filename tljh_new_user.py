@@ -16,6 +16,7 @@ def tljh_new_user_create(username):
         os.system(f"echo ' ' copying new_user_data >> tljh-new-user.log")
         try:
             shutil.copytree("new_user_data", home, dirs_exist_ok=True)
+            os.system(f"chown -R {username}:{username} {home}")
         except:
             f=open("tljh-new-user.log", 'a')
             print (traceback.format_exc(), file=f)
