@@ -10,6 +10,7 @@ def tljh_new_user_create(username):
             path = path.split("/")[1]
             break
     home = f"/{path}/{username}"
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", file=f)
     os.system(f"echo NEW USER: {username} HOME: {home} >> tljh-new-user.log")
 
     if os.path.isdir('new_user_data'):
@@ -28,5 +29,7 @@ def tljh_new_user_create(username):
         os.system(f"echo ' ' executing new_user_script {home} >> tljh-new-user.log")
         err = os.system(f"./new_user_script {home} >> tljh-new-user.log 2>&1")
         os.system(f"echo ' ' script returns {err} >> tljh-new-user.log")
+        if err:
+            raise Exception("new_user_script error {err}")
     else:
         os.system(f"echo ' ' no new_user_script found >> tljh-new-user.log")
